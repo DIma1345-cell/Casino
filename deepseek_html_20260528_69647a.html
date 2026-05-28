@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>👑 ROYAL CASINO — VIP & РЕФЕРАЛКА 👑</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; }
+        body {
+            background: linear-gradient(45deg, #0a0f1a, #1a0f2a, #0a1f2a, #2a0f1a);
+            background-size: 400% 400%;
+            animation: hyperGradient 12s ease infinite;
+            min-height: 100vh;
+            padding: 20px;
+            font-family: 'Segoe UI', system-ui;
+            position: relative;
+            overflow-x: hidden;
+        }
+        .particle { position: fixed; pointer-events: none; z-index: 0; animation: floatParticle linear forwards; }
+        @keyframes floatParticle { 0% { transform: translateY(100vh) rotate(0deg); opacity: 1; } 100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; } }
+        @keyframes hyperGradient { 0% { background-position: 0% 50%; } 25% { background-position: 50% 100%; } 50% { background-position: 100% 50%; } 75% { background-position: 50% 0%; } 100% { background-position: 0% 50%; } }
+        body.light {
+            background: linear-gradient(45deg, #e0e5ec, #f5e6d3, #e8e0d0, #d4e0ec);
+            background-size: 400% 400%;
+            animation: hyperGradientLight 12s ease infinite;
+        }
+        @keyframes hyperGradientLight { 0% { background-position: 0% 50%; } 25% { background-position: 50% 100%; } 50% { background-position: 100% 50%; } 75% { background-position: 50% 0%; } 100% { background-position: 0% 50%; } }
+        body.light .game-panel, body.light .top-bar, body.light .stat-block,
+        body.light .slot-reel, body.light .bj-card, body.light .coin,
+        body.light .roulette-cell, body.light .players-list,
+        body.light .leaderboard, body.light .achievements-list, body.light .daily-tasks,
+        body.light .rps-card, body.light .lucky-wheel-game, body.light .chest-game, body.light .battleship-game,
+        body.light .payment-methods {
+            background: rgba(240, 245, 255, 0.95);
+            color: #1a1a2e;
+        }
+        body.light .battleship-cell { background: #2c3e50; color: white; }
+        body.light .battleship-cell.hit { background: #27ae60; }
+        body.light .battleship-cell.miss { background: #e74c3c; }
+        body.light .leaderboard-item, body.light .achievement-item, body.light .task-item {
+            color: #1a1a2e;
+            border-bottom-color: #b8860b;
+        }
+        body.light .input-styled { background: white; color: #b8860b; border-color: #b8860b; }
+        body.light .balance-box { background: #ffffffcc; }
+        body.light .btn-icon, body.light .num-btn, body.light .game-tab { background: #e0e5ec; color: #1a1a2e; }
+        body.dark .game-panel, body.dark .top-bar, body.dark .stat-block,
+        body.dark .slot-reel, body.dark .players-list,
+        body.dark .leaderboard, body.dark .achievements-list, body.dark .daily-tasks,
+        body.dark .rps-card, body.dark .lucky-wheel-game, body.dark .chest-game, body.dark .battleship-game,
+        body.dark .payment-methods {
+            background: rgba(8, 12, 25, 0.85);
+            color: #ffefbf;
+        }
+        body.dark .battleship-cell { background: #1a1f32; color: #ffefbf; }
+        body.dark .battleship-cell.hit { background: #27ae60; }
+        body.dark .battleship-cell.miss { background: #c0392b; }
+        body.dark .leaderboard-item, body.dark .achievement-item, body.dark .task-item {
+            color: #ffefbf;
+            border-bottom-color: rgba(210,180,100,0.3);
+        }
+        body.dark .input-styled { background: #010418; color: #f5d742; border-color: #dba347; }
+        body.dark .balance-box { background: #000000cc; }
+        body.dark .btn-icon, body.dark .num-btn, body.dark .game-tab { background: #1f2542; color: #ffefbf; }
+        .app { max-width: 1400px; margin: 0 auto; position: relative; z-index: 1; }
+        .top-bar { border-radius: 80px; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 25px; border: 1px solid rgba(210,180,100,0.6); backdrop-filter: blur(10px); }
+        .balance-box { padding: 8px 30px; border-radius: 60px; transition: all 0.2s; }
+        .balance-box.green-flash { background: #00aa33cc; box-shadow: 0 0 20px #00ff00; }
+        .balance-box.red-flash { background: #aa2200cc; box-shadow: 0 0 20px #ff3300; }
+        .balance-box span:first-child { font-size: 0.8rem; }
+        .balance-box span:last-child { font-size: 2rem; font-weight: 800; margin-left: 12px; }
+        .btn-icon { border: none; padding: 8px 18px; border-radius: 50px; font-weight: 600; cursor: pointer; border-bottom: 2px solid #dba347; transition: 0.1s; }
+        .btn-icon:hover { transform: scale(1.02); }
+        .btn-icon:active { transform: scale(0.98); }
+        .btn-big { background: radial-gradient(ellipse at 30% 35%, #e09d1a, #9a4700); border: none; font-weight: bold; padding: 10px 28px; border-radius: 60px; color: white; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.3); transition: 0.07s linear; font-size: 1rem; }
+        .btn-big:hover { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.4); }
+        .btn-big:active { transform: translateY(2px); }
+        .input-styled { border-radius: 60px; padding: 8px 14px; font-size: 0.9rem; text-align: center; font-weight: bold; border: 2px solid #dba347; }
+        .game-tabs { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 20px; }
+        .game-tab { padding: 8px 20px; border-radius: 50px; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: 0.2s; }
+        .game-tab.active { background: linear-gradient(95deg, #e09d1a, #b45f06); color: white; box-shadow: 0 0 12px rgba(224,157,26,0.5); }
+        .game-panel { display: none; border-radius: 48px; padding: 20px; border: 1px solid rgba(210,180,100,0.35); animation: fade 0.2s; }
+        .game-panel.active-panel { display: block; }
+        @keyframes fade { from { opacity: 0; transform: translateY(8px);} to { opacity: 1; transform: translateY(0);} }
+        .stat-block { border-radius: 40px; padding: 10px; margin-top: 12px; font-size: 0.8rem; }
+        /* Слоты */
+        .slots-machine { text-align: center; }
+        .slot-reels { display: flex; justify-content: center; gap: 20px; margin: 20px 0; }
+        .slot-reel { width: 110px; height: 110px; border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 3.5rem; border: 3px solid #f3c26b; background: linear-gradient(145deg, #1a1f32, #0e1428); overflow: hidden; position: relative; }
+        .slot-reel .reel-strip { position: absolute; width: 100%; display: flex; flex-direction: column; align-items: center; transition: transform 0.05s linear; }
+        .slot-reel .reel-symbol { height: 110px; display: flex; align-items: center; justify-content: center; font-size: 3.5rem; }
+        .slot-reel.spinning .reel-strip { animation: reelSpin 0.08s linear infinite; }
+        @keyframes reelSpin { 0% { transform: translateY(0); } 100% { transform: translateY(-110px); } }
+        /* Рулетка */
+        .roulette-wheel { width: 320px; height: 320px; position: relative; margin: 0 auto; }
+        .roulette-wheel canvas { position: absolute; width: 100%; height: 100%; border-radius: 50%; transition: transform 2s cubic-bezier(0.2, 0.9, 0.4, 1.1); }
+        .roulette-wheel canvas.spinning { transform: rotate(3600deg); }
+        .roulette-pointer { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-top: 30px solid #ff4444; z-index: 3; }
+        .roulette-numbers-grid { display: grid; grid-template-columns: repeat(9, 1fr); gap: 5px; margin: 15px auto; max-width: 550px; }
+        .roulette-cell { padding: 8px 5px; border-radius: 30px; text-align: center; font-weight: bold; font-size: 0.85rem; cursor: pointer; background: #1a1f32; border: 1px solid rgba(210,180,100,0.3); transition: 0.1s; }
+        .roulette-cell.selected { background: #e09d1a; color: black; transform: scale(1.05); box-shadow: 0 0 8px gold; }
+        .roulette-bet-buttons { display: flex; justify-content: center; gap: 10px; margin: 10px 0; flex-wrap: wrap; }
+        /* Кости */
+        .dice { display: flex; justify-content: center; gap: 25px; margin: 20px 0; }
+        .die { width: 75px; height: 75px; border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 2.8rem; border: 3px solid gold; background: linear-gradient(145deg, #1a1f32, #0e1428); }
+        .die.rolling { animation: diceRollAnim 0.3s ease-out; }
+        @keyframes diceRollAnim { 0% { transform: rotate(0deg) scale(1); } 50% { transform: rotate(180deg) scale(1.1); } 100% { transform: rotate(360deg) scale(1); } }
+        .numbers-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 15px 0; }
+        .num-btn { width: 50px; padding: 8px 0; font-size: 0.9rem; border-radius: 35px; border: none; cursor: pointer; }
+        .num-btn.selected { background: #e09d1a; color: black; }
+        /* Крэш */
+        .crash-box { text-align: center; }
+        .multiplier-display { font-size: 2.2rem; font-weight: 800; background: #010418; display: inline-block; padding: 12px 35px; border-radius: 60px; margin: 15px 0; }
+        .crash-bar { width: 100%; height: 10px; background: #2a2f4a; border-radius: 20px; margin: 15px 0; overflow: hidden; }
+        .crash-fill { width: 0%; height: 100%; background: linear-gradient(90deg, #e09d1a, #ff4d4d); transition: width 0.05s linear; }
+        /* Сундуки */
+        .chest-game { text-align: center; padding: 20px; }
+        .chests { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin: 20px 0; }
+        .chest { width: 100px; height: 100px; background: linear-gradient(145deg, #8B4513, #654321); border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 3rem; cursor: pointer; transition: 0.1s; box-shadow: 0 10px 15px rgba(0,0,0,0.3); }
+        .chest:hover { transform: scale(1.05); }
+        .chest:active { transform: scale(0.98); }
+        /* Морской бой */
+        .battleship-game { text-align: center; }
+        .battleship-board { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; max-width: 300px; margin: 20px auto; }
+        .battleship-cell { aspect-ratio: 1; background: #1a1f32; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer; transition: 0.1s; border: 1px solid #dba347; }
+        .battleship-cell:hover { transform: scale(1.05); background: #2a2f4a; }
+        .battleship-cell.hit { background: #27ae60; cursor: default; }
+        .battleship-cell.miss { background: #c0392b; cursor: default; }
+        /* Колесо удачи */
+        .lucky-wheel-game { text-align: center; padding: 15px; border-radius: 40px; }
+        .lucky-wheel-canvas { margin: 15px auto; display: block; background: #151e2e; border-radius: 50%; box-shadow: 0 10px 25px black; }
+        /* Удача */
+        .lucky-wheel { font-size: 1.8rem; font-weight: bold; background: #010418; display: inline-block; padding: 12px 30px; border-radius: 70px; transition: transform 0.5s ease-out; }
+        .lucky-spin { transform: rotate(720deg); }
+        /* Блэкджек */
+        .bj-table { background: linear-gradient(145deg, #0a5c2e, #06451f); border-radius: 50px; padding: 20px; margin: 15px 0; }
+        .bj-hand { display: flex; justify-content: center; gap: 12px; margin: 15px 0; flex-wrap: wrap; }
+        .bj-card { padding: 12px 18px; border-radius: 14px; font-size: 1.1rem; font-weight: bold; background: white; color: black; box-shadow: 2px 2px 6px rgba(0,0,0,0.3); min-width: 60px; text-align: center; animation: cardDeal 0.3s ease-out; }
+        @keyframes cardDeal { from { opacity: 0; transform: translateX(-20px) rotate(-10deg); } to { opacity: 1; transform: translateX(0) rotate(0deg); } }
+        /* Орёл/Решка */
+        .coin { width: 150px; height: 150px; margin: 15px auto; background: radial-gradient(circle at 35% 35%, #ffd966, #b8860b); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 4rem; box-shadow: 0 10px 20px rgba(0,0,0,0.4); cursor: pointer; }
+        .coin-flip { animation: coinFlipReal 0.8s ease-out; }
+        @keyframes coinFlipReal { 0% { transform: rotateY(0deg); } 25% { transform: rotateY(360deg); } 50% { transform: rotateY(720deg); } 75% { transform: rotateY(1080deg); } 100% { transform: rotateY(1440deg); } }
+        /* Колесо фортуны */
+        .wheel-area { text-align: center; }
+        canvas { background: #151e2e; border-radius: 50%; box-shadow: 0 20px 30px black; width: 100%; max-width: 350px; height: auto; aspect-ratio: 1/1; margin: 0 auto; }
+        .players-list { max-height: 180px; overflow-y: auto; border-radius: 30px; padding: 8px; margin-top: 12px; }
+        .player-item { margin: 5px 0; padding: 6px 12px; border-radius: 50px; display: flex; justify-content: space-between; font-size: 0.8rem; background: #1a1f32; }
+        /* RPS */
+        .rps-container { text-align: center; }
+        .rps-choices { display: flex; justify-content: center; gap: 20px; margin: 25px 0; flex-wrap: wrap; }
+        .rps-card { background: linear-gradient(145deg, #1a1f32, #0e1428); border: 2px solid #f3c26b; border-radius: 30px; padding: 20px; width: 100px; cursor: pointer; transition: 0.1s; text-align: center; }
+        .rps-card:hover { transform: scale(1.05); background: #2a2f4a; }
+        .rps-card:active { transform: scale(0.98); }
+        .rps-emoji { font-size: 3rem; }
+        .rps-name { font-size: 0.8rem; margin-top: 8px; color: #ffd966; }
+        /* Дополнительные блоки */
+        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; margin-top: 20px; }
+        .leaderboard, .achievements-list, .daily-tasks, .referral-box, .vip-box, .payment-methods { background: rgba(0,0,0,0.5); border-radius: 35px; padding: 12px; backdrop-filter: blur(5px); }
+        .leaderboard h3, .achievements-list h3, .daily-tasks h3, .referral-box h3, .vip-box h3, .payment-methods h3 { color: #ffd966; margin-bottom: 8px; font-size: 1rem; border-left: 3px solid gold; padding-left: 10px; }
+        .leaderboard-item, .achievement-item, .task-item { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid rgba(210,180,100,0.2); font-size: 0.75rem; }
+        .vip-level { font-size: 1rem; font-weight: bold; color: gold; text-align: center; margin: 8px 0; }
+        .referral-link { background: #010418; padding: 6px; border-radius: 30px; font-size: 0.65rem; word-break: break-all; margin: 8px 0; text-align: center; }
+        .payment-buttons { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin: 10px 0; }
+        .payment-btn { background: linear-gradient(145deg, #2a2f4a, #1a1f32); border: 1px solid #dba347; border-radius: 40px; padding: 8px 15px; cursor: pointer; font-weight: bold; transition: 0.1s; }
+        .payment-btn:hover { transform: scale(1.02); background: #3a3f5a; }
+        .game-notify { position: fixed; top: 40%; left: 50%; transform: translateX(-50%) scale(0.8); padding: 15px 35px; border-radius: 60px; font-size: 1.5rem; font-weight: bold; z-index: 10000; opacity: 0; transition: all 0.3s ease; white-space: nowrap; pointer-events: none; }
+        .game-notify.show { opacity: 1; transform: translateX(-50%) scale(1); }
+        .game-notify.win { background: linear-gradient(135deg, #00cc44, #008833); color: white; box-shadow: 0 0 25px #00ff55; }
+        .game-notify.lose { background: linear-gradient(135deg, #cc3300, #882200); color: white; box-shadow: 0 0 25px #ff3300; }
+        .floating-notify { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.9); backdrop-filter: blur(16px); padding: 8px 20px; border-radius: 60px; font-size: 0.75rem; border: 1px solid gold; pointer-events: none; opacity: 0; transition: 0.2s; z-index: 1000; }
+        .log-panel { margin-top: 20px; background: rgba(0,0,0,0.5); border-radius: 30px; padding: 10px; max-height: 140px; overflow-y: auto; }
+        .log-entry { padding: 3px 8px; border-bottom: 1px solid rgba(210,180,100,0.3); font-size: 0.65rem; font-family: monospace; }
+        @media (max-width: 700px) {
+            .slot-reel { width: 80px; height: 80px; }
+            .slot-reel .reel-symbol { font-size: 2.5rem; height: 80px; }
+            .roulette-wheel { width: 240px; height: 240px; }
+            .game-notify { font-size: 1rem; padding: 10px 20px; white-space: normal; width: 80%; text-align: center; }
+            .roulette-numbers-grid { grid-template-columns: repeat(6, 1fr); }
+            .die { width: 60px; height: 60px; font-size: 2rem; }
+            .info-grid { grid-template-columns: 1fr; }
+            .chest { width: 70px; height: 70px; font-size: 2rem; }
+            .battleship-board { max-width: 250px; }
+            .coin { width: 110px; height: 110px; font-size: 3rem; }
+        }
+    </style>
+</head>
+<body class="dark">
+<div class="app">
+    <div class="top-bar">
+        <div class="balance-box" id="balanceBox"><span>💰 БАЛАНС</span><span id="globalBalance">5000</span></div>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button id="dailyBonusBtn" class="btn-icon">🎁 БОНУС</button>
+            <button id="quickGameBtn" class="btn-icon">⚡ БЫСТРАЯ</button>
+            <button id="settingsBtn" class="btn-icon">⚙️ НАСТРОЙКИ</button>
+            <button id="cardBtn" class="btn-icon">💳 КАРТА</button>
+            <button id="withdrawBtn" class="btn-icon">🏧 ВЫВОД</button>
+        </div>
+    </div>
+
+    <div class="game-tabs" id="gameTabs">
+        <div class="game-tab active" data-game="slots">🎰 СЛОТЫ</div><div class="game-tab" data-game="roulette">🎯 РУЛЕТКА</div><div class="game-tab" data-game="dice">🎲 КОСТИ</div><div class="game-tab" data-game="crash">📈 КРЭШ</div><div class="game-tab" data-game="lucky">✨ УДАЧА</div><div class="game-tab" data-game="bj">🃏 БЛЭКДЖЕК</div><div class="game-tab" data-game="coin">🪙 ОРЁЛ/РЕШКА</div><div class="game-tab" data-game="wheel">🎡 КОЛЕСО</div><div class="game-tab" data-game="rps">✊ RPS</div><div class="game-tab" data-game="wheel2">🎡 КОЛЕСО УДАЧИ</div><div class="game-tab" data-game="chest">📦 СУНДУКИ</div><div class="game-tab" data-game="battleship">🚢 МОРСКОЙ БОЙ</div>
+    </div>
+
+    <!-- ИГРЫ (упрощённые шаблоны) -->
+    <div id="slotsGame" class="game-panel active-panel"><div class="slots-machine"><div class="slot-reels"><div class="slot-reel" id="slot1"><div class="reel-strip" id="strip1"></div></div><div class="slot-reel" id="slot2"><div class="reel-strip" id="strip2"></div></div><div class="slot-reel" id="slot3"><div class="reel-strip" id="strip3"></div></div></div><div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;"><input type="number" id="slotBet" class="input-styled" value="50" style="width:100px"><button id="spinSlotsBtn" class="btn-big">🎰 КРУТИТЬ</button><button id="slotMaxBtn" class="btn-icon">MAX</button></div><div id="slotHistory" class="stat-block"></div></div></div>
+    <div id="rouletteGame" class="game-panel"><div class="roulette-area"><div class="roulette-wheel"><canvas id="rouletteCanvas" width="320" height="320"></canvas><div class="roulette-pointer"></div></div><div class="roulette-numbers-grid" id="rouletteGrid"></div><div class="roulette-bet-buttons"><button id="betRedBtn" class="btn-icon" style="background:#c0392b">🔴 КРАСНОЕ</button><button id="betBlackBtn" class="btn-icon" style="background:#2c3e50">⚫ ЧЁРНОЕ</button></div><div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;"><input type="number" id="rouletteBet" class="input-styled" value="100" style="width:100px"><button id="spinRouletteBtn" class="btn-big">🎯 КРУТИТЬ</button><button id="rouletteMaxBtn" class="btn-icon">MAX</button></div><div id="rouletteResult" class="stat-block">Выберите число или цвет</div></div></div>
+    <div id="diceGame" class="game-panel"><div class="dice-area"><div class="dice"><div class="die" id="die1">⚀</div><div class="die" id="die2">⚀</div></div><div class="numbers-grid" id="numbersGrid"></div><div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;"><input type="number" id="diceBet" class="input-styled" value="100" style="width:100px"><button id="rollDiceBtn" class="btn-big">🎲 БРОСИТЬ</button><button id="diceMaxBtn" class="btn-icon">MAX</button></div><div id="diceResult" class="stat-block">Выберите число (2-12), выигрыш x5</div></div></div>
+    <div id="crashGame" class="game-panel"><div class="crash-box"><div class="multiplier-display" id="crashMultiplier">1.00x</div><div class="crash-bar"><div class="crash-fill" id="crashFill"></div></div><div><input type="number" id="crashBet" class="input-styled" value="100" style="width:100px"><button id="startCrashBtn" class="btn-big">🚀 ЗАПУСТИТЬ</button></div><div id="crashStatus" class="stat-block">⚡ Кэф растёт, успейте вывести!</div><button id="cashoutBtn" class="btn-icon">💸 ВЫВЕСТИ</button></div></div>
+    <div id="luckyGame" class="game-panel"><div style="text-align:center"><div class="lucky-wheel" id="luckyMultiplier">x1</div><div style="margin:15px 0"><input type="number" id="luckyBet" class="input-styled" value="100" style="width:100px"><button id="spinLuckyBtn" class="btn-big">🎡 КРУТНУТЬ</button></div><div id="luckyResult" class="stat-block">Множитель от x0.1 до x5</div></div></div>
+    <div id="bjGame" class="game-panel"><div class="bj-table"><h3 style="text-align:center; color:#ffd966">🃏 BLACKJACK</h3><div><p style="color:#ffd966">ВАШИ КАРТЫ:</p><div class="bj-hand" id="playerBJHand"></div><p style="color:#ffd966">КАРТЫ ДИЛЕРА:</p><div class="bj-hand" id="botBJHand"></div></div><div style="text-align:center; margin:15px 0"><input type="number" id="bjBet" class="input-styled" value="200" style="width:100px"><button id="hitBtn" class="btn-icon">➕ ЕЩЁ</button><button id="standBtn" class="btn-icon">✋ ХВАТИТ</button><button id="newBJGameBtn" class="btn-big">🃏 НОВАЯ</button></div><div id="bjResult" class="stat-block" style="text-align:center">Сделайте ставку</div></div></div>
+    <div id="coinGame" class="game-panel"><div class="coin-area"><div class="coin" id="coinDisplay">🪙</div><div><input type="number" id="coinBet" class="input-styled" value="50" style="width:100px"><button id="coinHeadsBtn" class="btn-icon">🦅 ОРЁЛ</button><button id="coinTailsBtn" class="btn-icon">🪙 РЕШКА</button></div><div id="coinResult" class="stat-block">Выберите сторону (выигрыш x1.5)</div></div></div>
+    <div id="wheelGame" class="game-panel"><div class="wheel-area"><canvas id="wheelCanvas" width="500" height="500"></canvas><div style="margin:15px 0"><input type="text" id="playerNameInput" placeholder="Имя" class="input-styled" style="width:110px"><input type="number" id="playerBetAmount" value="100" class="input-styled" style="width:90px; margin-left:8px"><button id="addPlayerBtn" class="btn-icon">➕ ДОБАВИТЬ</button></div><button id="spinWheelBtn" class="btn-big">🌀 КРУТИТЬ КОЛЕСО</button><div id="wheelStats" class="stat-block">⚡ Общий банк: 0 | ДЖЕКПОТ: 0</div><div id="playersList" class="players-list">✨ Добавьте игроков</div></div></div>
+    <div id="rpsGame" class="game-panel"><div class="rps-container"><div class="rps-choices"><div class="rps-card" id="rpsRock"><div class="rps-emoji">✊</div><div class="rps-name">КАМЕНЬ</div></div><div class="rps-card" id="rpsPaper"><div class="rps-emoji">✋</div><div class="rps-name">БУМАГА</div></div><div class="rps-card" id="rpsScissors"><div class="rps-emoji">✌️</div><div class="rps-name">НОЖНИЦЫ</div></div></div><div><input type="number" id="rpsBet" class="input-styled" value="100" style="width:100px"></div><div id="rpsResult" class="stat-block">👉 Выберите жест, выигрыш x2</div></div></div>
+    <div id="wheel2Game" class="game-panel"><div class="lucky-wheel-game"><canvas id="luckyWheelCanvas" width="350" height="350" class="lucky-wheel-canvas"></canvas><div class="lucky-wheel-btn"><input type="number" id="luckyWheelBet" class="input-styled" value="100" style="width:120px"><button id="spinLuckyWheelBtn" class="btn-big">🎡 КРУТНУТЬ</button></div><div id="luckyWheelResult" class="stat-block">Выпадет множитель от x0.5 до x10</div></div></div>
+    <div id="chestGame" class="game-panel"><div class="chest-game"><h3 style="color:#ffd966">📦 СУНДУК С СОКРОВИЩАМИ</h3><div class="chests"><div class="chest" data-chest="0">📦</div><div class="chest" data-chest="1">📦</div><div class="chest" data-chest="2">📦</div></div><div><input type="number" id="chestBet" class="input-styled" value="100" style="width:120px"><button id="resetChestsBtn" class="btn-icon">🔄 НОВАЯ ИГРА</button></div><div id="chestResult" class="stat-block">Выберите сундук и получите множитель x0.5 - x3</div></div></div>
+    <div id="battleshipGame" class="game-panel"><div class="battleship-game"><h3 style="color:#ffd966">🚢 МОРСКОЙ БОЙ (3 корабля)</h3><div class="battleship-board" id="battleshipBoard"></div><div><input type="number" id="battleshipBet" class="input-styled" value="100" style="width:120px"><button id="resetBattleshipBtn" class="btn-icon">🔄 НОВАЯ ИГРА</button></div><div id="battleshipResult" class="stat-block">Найдите 3 корабля! Выигрыш x5 за каждый</div></div></div>
+
+    <!-- ДОПОЛНИТЕЛЬНЫЕ БЛОКИ -->
+    <div class="info-grid">
+        <div class="leaderboard" id="leaderboard"><h3>🏆 ТУРНИРНАЯ ТАБЛИЦА</h3><div id="leaderboardList">Загрузка...</div></div>
+        <div class="achievements-list" id="achievementsList"><h3>🏅 ДОСТИЖЕНИЯ</h3><div id="achievementsContainer">Загрузка...</div></div>
+        <div class="daily-tasks" id="dailyTasks"><h3>📋 ЕЖЕДНЕВНЫЕ ЗАДАНИЯ</h3><div id="tasksContainer">Загрузка...</div></div>
+        <div class="referral-box" id="referralBox"><h3>🔗 РЕФЕРАЛЬНАЯ СИСТЕМА</h3><div id="referralLink" class="referral-link"></div><button id="copyReferralBtn" class="btn-icon" style="padding:5px 12px; font-size:0.7rem">📋 КОПИРОВАТЬ</button><div id="referralStats" style="font-size:0.65rem; margin-top:6px"></div></div>
+        <div class="vip-box" id="vipBox"><h3>👑 VIP СТАТУС</h3><div id="vipLevel" class="vip-level">Уровень 1 (бонус +0%)</div><div id="vipBonus" style="font-size:0.65rem">До следующего уровня: 5000 ставок</div><div style="height:5px; background:#2a2f4a; border-radius:10px; margin-top:8px"><div id="vipProgressFill" style="width:0%; height:100%; background:gold; border-radius:10px"></div></div><button id="buyVipBtn" class="btn-icon" style="margin-top:8px; width:100%">💎 КУПИТЬ VIP (2000)</button></div>
+        <div class="payment-methods" id="paymentMethods"><h3>💳 МЕТОДЫ ОПЛАТЫ</h3><div class="payment-buttons"><div class="payment-btn">💳 VISA</div><div class="payment-btn">💳 MasterCard</div><div class="payment-btn">🟠 Криптовалюта</div><div class="payment-btn">📱 USDT</div></div><div style="font-size:0.65rem; text-align:center; margin-top:8px">💰 Пополнить баланс: +1000 💎</div><button id="depositBtn" class="btn-icon" style="margin-top:5px; width:100%">💵 ПОПОЛНИТЬ (1000)</button></div>
+    </div>
+
+    <div class="log-panel"><div style="font-weight:bold; margin-bottom:5px">📋 СОБЫТИЯ</div><div id="logList"></div></div>
+</div>
+<div id="toastMsg" class="floating-notify"></div>
+<div id="settingsModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:#000000dd; backdrop-filter:blur(8px); justify-content:center; align-items:center; z-index:2000;">
+    <div style="background:#0e1322; border-radius:50px; padding:25px; width:300px; text-align:center; border:1px solid gold;">
+        <h3 style="color:#ffda88; margin-bottom:12px">⚙️ НАСТРОЙКИ</h3>
+        <div style="margin:12px 0"><button id="lightThemeBtn" class="btn-icon">☀️ СВЕТЛАЯ</button><button id="darkThemeBtn" class="btn-icon" style="margin-left:8px">🌙 ТЁМНАЯ</button></div>
+        <div style="margin:12px 0"><button id="toggleParticlesBtn" class="btn-icon">✨ ЧАСТИЦЫ</button></div>
+        <button id="closeSettings" class="btn-icon" style="margin-top:12px">ЗАКРЫТЬ</button>
+    </div>
+</div>
+
+<script>
+    // ========== ОСНОВНЫЕ ПЕРЕМЕННЫЕ ==========
+    let globalBalance = 5000;
+    let jackpot = 0;
+    let lastDailyBonus = localStorage.getItem('lastDailyBonus') || 0;
+    let audioCtx = null;
+    let particlesEnabled = localStorage.getItem('particlesEnabled') !== 'false';
+    let particleInterval = null;
+    
+    // ДОСТИЖЕНИЯ
+    let achievements = JSON.parse(localStorage.getItem('achievements')) || [
+        { id: 'first_win', name: '🎉 ПЕРВАЯ ПОБЕДА', desc: 'Выиграйте любую игру', reward: 100, unlocked: false },
+        { id: 'big_winner', name: '💰 КРУПНЫЙ ВЫИГРЫШ', desc: 'Выиграйте более 1000 за раз', reward: 500, unlocked: false },
+        { id: 'slots_master', name: '🎰 МАСТЕР СЛОТОВ', desc: 'Сыграйте 10 раз в слоты', reward: 300, unlocked: false, count: 0 },
+        { id: 'dice_luck', name: '🎲 ВЕЗУНЧИК', desc: 'Выиграйте в кости 3 раза', reward: 200, unlocked: false, count: 0 },
+        { id: 'crash_hero', name: '📈 ГЕРОЙ КРЭША', desc: 'Кэшаут на x3 и выше', reward: 400, unlocked: false },
+        { id: 'vip_player', name: '👑 VIP ИГРОК', desc: 'Достигните 5 уровня VIP', reward: 1000, unlocked: false }
+    ];
+    
+    // VIP СИСТЕМА
+    let vipLevel = parseInt(localStorage.getItem('vipLevel')) || 1;
+    let vipBonus = (vipLevel - 1) * 5;
+    let totalBet = parseInt(localStorage.getItem('totalBet')) || 0;
+    
+    // РЕФЕРАЛЬНАЯ СИСТЕМА
+    let referralCode = localStorage.getItem('referralCode') || Math.random().toString(36).substring(2, 8).toUpperCase();
+    let referralCount = parseInt(localStorage.getItem('referralCount')) || 0;
+    let referralBonus = parseInt(localStorage.getItem('referralBonus')) || 0;
+    
+    // ЗАДАНИЯ
+    let dailyTasks = JSON.parse(localStorage.getItem('dailyTasks')) || {
+        slots: 0, dice: 0, roulette: 0, rps: 0, lastReset: Date.now()
+    };
+    
+    // ДАННЫЕ ДЛЯ ТУРНИРНОЙ ТАБЛИЦЫ
+    let leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
+    
+    function playSound(type) { try { if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain(); osc.connect(gain); gain.connect(audioCtx.destination); osc.type = 'sine'; let freq = 800, d = 0.2; if(type === 'win'){ freq = 1200; d = 0.3; } else if(type === 'lose'){ freq = 400; d = 0.4; } else if(type === 'crash'){ freq = 200; d = 0.5; osc.type = 'sawtooth'; } osc.frequency.value = freq; gain.gain.value = 0.15; osc.start(); gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + d); osc.stop(audioCtx.currentTime + d); } catch(e){} }
+    
+    function createParticle() { if (!particlesEnabled) return; const p = document.createElement('div'); p.className = 'particle'; p.innerHTML = ['💰','💎','🪙','✨','⭐'][Math.floor(Math.random()*5)]; p.style.left = Math.random() * 100 + '%'; p.style.fontSize = (Math.random() * 20 + 10) + 'px'; p.style.animationDuration = (Math.random() * 5 + 3) + 's'; document.body.appendChild(p); setTimeout(() => p.remove(), 8000); }
+    function startParticles() { if (particleInterval) clearInterval(particleInterval); if (particlesEnabled) particleInterval = setInterval(() => { for(let i=0;i<2;i++) createParticle(); }, 1000); }
+    startParticles();
+    function toggleParticles() { particlesEnabled = !particlesEnabled; localStorage.setItem('particlesEnabled', particlesEnabled); if (particlesEnabled) startParticles(); else { if (particleInterval) clearInterval(particleInterval); particleInterval = null; } showMessage(particlesEnabled ? "Частицы включены" : "Частицы выключены"); }
+    
+    function showGameNotify(text, isWin){ let n = document.createElement('div'); n.className = `game-notify ${isWin ? 'win' : 'lose'}`; n.innerText = text; document.body.appendChild(n); setTimeout(() => n.classList.add('show'), 10); setTimeout(() => { n.classList.remove('show'); setTimeout(() => n.remove(), 300); }, 2000); }
+    function burstConfetti(){ for(let i=0;i<120;i++){ let c = document.createElement('div'); c.style.position = 'fixed'; c.style.left = Math.random() * 100 + '%'; c.style.top = '-10px'; c.style.width = (Math.random() * 8 + 4) + 'px'; c.style.height = (Math.random() * 8 + 4) + 'px'; c.style.background = `hsl(${Math.random() * 360}, 100%, 50%)`; c.style.borderRadius = '2px'; c.style.pointerEvents = 'none'; c.style.zIndex = '5000'; c.style.animation = `confettiFall ${Math.random() * 2 + 1}s ease-out forwards`; document.body.appendChild(c); setTimeout(() => c.remove(), 3000); } }
+    async function animateBalance(newVal, isWin){ let old = globalBalance, diff = newVal - old, steps = 15, stepV = diff / steps; for(let i=0;i<=steps;i++){ document.getElementById('globalBalance').innerText = Math.floor(old + stepV * i); await new Promise(r => setTimeout(r, 12)); } document.getElementById('globalBalance').innerText = Math.floor(newVal); globalBalance = newVal; saveGameData(); let box = document.getElementById('balanceBox'); box.classList.add(isWin ? 'green-flash' : 'red-flash'); setTimeout(() => box.classList.remove('green-flash', 'red-flash'), 400); if(isWin && diff > 0){ showGameNotify(`+${Math.floor(diff)} 💎`, true); if(diff > 500) burstConfetti(); }else if(!isWin && diff < 0){ showGameNotify(`-${Math.floor(-diff)} 💎`, false); } }
+    function addLog(text, isWin){ let log = document.getElementById('logList'); let e = document.createElement('div'); e.className = 'log-entry'; e.style.color = isWin ? '#90ff90' : '#ffa070'; e.innerText = new Date().toLocaleTimeString() + ' — ' + text; log.prepend(e); if(log.children.length > 20) log.removeChild(log.lastChild); saveGameData(); }
+    function showMessage(msg, isErr){ let t = document.getElementById('toastMsg'); t.innerText = msg; t.style.opacity = '1'; t.style.background = isErr ? '#771111cc' : '#163526cc'; setTimeout(() => t.style.opacity = '0', 2200); }
+    function updateBalanceUI(){ document.getElementById('globalBalance').innerText = Math.floor(globalBalance); }
+    function saveGameData(){ 
+        localStorage.setItem('globalBalance', globalBalance);
+        localStorage.setItem('jackpot', jackpot);
+        localStorage.setItem('lastDailyBonus', lastDailyBonus);
+        localStorage.setItem('achievements', JSON.stringify(achievements));
+        localStorage.setItem('vipLevel', vipLevel);
+        localStorage.setItem('totalBet', totalBet);
+        localStorage.setItem('referralCode', referralCode);
+        localStorage.setItem('referralCount', referralCount);
+        localStorage.setItem('referralBonus', referralBonus);
+        localStorage.setItem('dailyTasks', JSON.stringify(dailyTasks));
+        localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
+    }
+    function loadGameData(){ 
+        let saved = localStorage.getItem('globalBalance'); if(saved) globalBalance = parseInt(saved);
+        let savedJackpot = localStorage.getItem('jackpot'); if(savedJackpot) jackpot = parseInt(savedJackpot);
+        let savedBonus = localStorage.getItem('lastDailyBonus'); if(savedBonus) lastDailyBonus = parseInt(savedBonus);
+        let savedAch = localStorage.getItem('achievements'); if(savedAch) achievements = JSON.parse(savedAch);
+        let savedVip = localStorage.getItem('vipLevel'); if(savedVip) vipLevel = parseInt(savedVip);
+        let savedBet = localStorage.getItem('totalBet'); if(savedBet) totalBet = parseInt(savedBet);
+        let savedRefCode = localStorage.getItem('referralCode'); if(savedRefCode) referralCode = savedRefCode;
+        let savedRefCount = localStorage.getItem('referralCount'); if(savedRefCount) referralCount = parseInt(savedRefCount);
+        let savedRefBonus = localStorage.getItem('referralBonus'); if(savedRefBonus) referralBonus = parseInt(savedRefBonus);
+        let savedTasks = localStorage.getItem('dailyTasks'); if(savedTasks) dailyTasks = JSON.parse(savedTasks);
+        let savedLeaderboard = localStorage.getItem('leaderboard'); if(savedLeaderboard) leaderboard = JSON.parse(savedLeaderboard);
+        updateBalanceUI();
+        updateVIP();
+        updateLeaderboard();
+        renderAchievements();
+        renderDailyTasks();
+        initReferral();
+    }
+    
+    function updateVIP() {
+        let newLevel = 1;
+        if (totalBet >= 50000) newLevel = 5;
+        else if (totalBet >= 20000) newLevel = 4;
+        else if (totalBet >= 10000) newLevel = 3;
+        else if (totalBet >= 5000) newLevel = 2;
+        else newLevel = 1;
+        if (newLevel > vipLevel) {
+            addLog(`🎉 Поздравляем! VIP уровень повышен до ${newLevel}!`, true);
+            playSound('win');
+        }
+        vipLevel = newLevel;
+        vipBonus = (vipLevel - 1) * 5;
+        document.getElementById('vipLevel').innerHTML = `Уровень ${vipLevel} (бонус +${vipBonus}%)`;
+        let progress = Math.min(100, (totalBet / 50000) * 100);
+        document.getElementById('vipProgressFill').style.width = progress + '%';
+        if (vipLevel >= 5) checkAchievement('vip_player');
+        localStorage.setItem('vipLevel', vipLevel);
+    }
+    
+    function buyVIP() {
+        let cost = 2000;
+        if (globalBalance < cost) { showMessage("Не хватает средств!",1); return; }
+        animateBalance(globalBalance - cost, false);
+        totalBet += 5000;
+        updateVIP();
+        addLog(`💎 Приобретён VIP статус! Текущий уровень: ${vipLevel}`, true);
+        playSound('win');
+        saveGameData();
+    }
+    
+    function checkAchievement(achId, extra = null) {
+        let ach = achievements.find(a => a.id === achId);
+        if (!ach || ach.unlocked) return;
+        if (achId === 'slots_master' && extra >= 10) { ach.unlocked = true; globalBalance += ach.reward; addLog(`🏆 ДОСТИЖЕНИЕ: ${ach.name} +${ach.reward} 💎`, true); playSound('win'); }
+        else if (achId === 'dice_luck' && extra >= 3) { ach.unlocked = true; globalBalance += ach.reward; addLog(`🏆 ДОСТИЖЕНИЕ: ${ach.name} +${ach.reward} 💎`, true); playSound('win'); }
+        else if (!ach.unlocked && achId !== 'slots_master' && achId !== 'dice_luck') {
+            ach.unlocked = true; globalBalance += ach.reward; addLog(`🏆 ДОСТИЖЕНИЕ: ${ach.name} +${ach.reward} 💎`, true); playSound('win');
+        }
+        updateBalanceUI();
+        renderAchievements();
+        saveGameData();
+    }
+    
+    function updateAchievementCount(achId, increment = 1) {
+        let ach = achievements.find(a => a.id === achId);
+        if (ach && !ach.unlocked) {
+            if (!ach.count) ach.count = 0;
+            ach.count += increment;
+            if (achId === 'slots_master' && ach.count >= 10) checkAchievement('slots_master', ach.count);
+            if (achId === 'dice_luck' && ach.count >= 3) checkAchievement('dice_luck', ach.count);
+            saveGameData();
+        }
+    }
+    
+    function renderAchievements() {
+        let container = document.getElementById('achievementsContainer');
+        container.innerHTML = achievements.map(a => `<div class="achievement-item"><span>${a.name}</span><span>${a.unlocked ? '✅' : '🔒'} +${a.reward}</span></div>`).join('');
+    }
+    
+    function renderDailyTasks() {
+        let container = document.getElementById('tasksContainer');
+        container.innerHTML = `
+            <div class="task-item"><span>🎰 Слоты: ${dailyTasks.slots || 0}/3</span><span>+200 💎</span></div>
+            <div class="task-item"><span>🎲 Кости: ${dailyTasks.dice || 0}/2</span><span>+150 💎</span></div>
+            <div class="task-item"><span>🎯 Рулетка: ${dailyTasks.roulette || 0}/2</span><span>+250 💎</span></div>
+            <div class="task-item"><span>✊ RPS: ${dailyTasks.rps || 0}/3</span><span>+100 💎</span></div>
+        `;
+    }
+    
+    function checkDailyTask(game, win) {
+        if (!win) return;
+        let reward = 0;
+        if (game === 'slots') { dailyTasks.slots = (dailyTasks.slots || 0) + 1; if (dailyTasks.slots >= 3 && dailyTasks.slots % 3 === 0) reward = 200; }
+        if (game === 'dice') { dailyTasks.dice = (dailyTasks.dice || 0) + 1; if (dailyTasks.dice >= 2 && dailyTasks.dice % 2 === 0) reward = 150; }
+        if (game === 'roulette') { dailyTasks.roulette = (dailyTasks.roulette || 0) + 1; if (dailyTasks.roulette >= 2 && dailyTasks.roulette % 2 === 0) reward = 250; }
+        if (game === 'rps') { dailyTasks.rps = (dailyTasks.rps || 0) + 1; if (dailyTasks.rps >= 3 && dailyTasks.rps % 3 === 0) reward = 100; }
+        if (reward > 0) {
+            animateBalance(globalBalance + reward, true);
+            addLog(`📋 Задание выполнено! +${reward} 💎`, true);
+            playSound('win');
+        }
+        renderDailyTasks();
+        saveGameData();
+    }
+    
+    function updateLeaderboard() {
+        let board = document.getElementById('leaderboardList');
+        if (leaderboard.length === 0) { board.innerHTML = '<div class="leaderboard-item">Нет данных</div>'; return; }
+        board.innerHTML = leaderboard.slice(0,10).map((p,i) => `<div class="leaderboard-item"><span>${i+1}. ${p.name}</span><span>${Math.floor(p.score)} 💎</span></div>`).join('');
+    }
+    
+    function initReferral() {
+        document.getElementById('referralLink').innerHTML = `royal-casino.com/ref/${referralCode}`;
+        document.getElementById('referralStats').innerHTML = `Приглашено: ${referralCount} | Бонус: ${Math.floor(referralBonus)} 💎`;
+    }
+    
+    function copyReferral() {
+        navigator.clipboard.writeText(`royal-casino.com/ref/${referralCode}`);
+        showMessage("Реферальная ссылка скопирована!");
+    }
+    
+    function deposit() {
+        animateBalance(globalBalance + 1000, true);
+        addLog("Пополнение баланса +1000 💎", true);
+        playSound('win');
+    }
+    
+    function dailyBonus(){ let now = Date.now(); if(now - lastDailyBonus < 86400000){ showMessage("Бонус через " + Math.ceil((86400000-(now-lastDailyBonus))/3600000)+" ч",1); return; } lastDailyBonus = now; animateBalance(globalBalance+500, true); addLog("Ежедневный бонус +500", true); playSound('win'); saveGameData(); }
+    function quickGame(){ let games = ['slots','roulette','dice','crash','lucky','bj','coin','wheel','rps','wheel2','chest','battleship']; let rg = games[Math.floor(Math.random()*games.length)]; document.querySelector(`.game-tab[data-game="${rg}"]`).click(); showMessage(`⚡ БЫСТРАЯ: ${rg.toUpperCase()}`); if(rg === 'slots') document.getElementById('spinSlotsBtn').click(); else if(rg === 'roulette') document.getElementById('spinRouletteBtn').click(); else if(rg === 'dice') document.getElementById('rollDiceBtn').click(); else if(rg === 'crash') document.getElementById('startCrashBtn').click(); else if(rg === 'lucky') document.getElementById('spinLuckyBtn').click(); else if(rg === 'bj') document.getElementById('newBJGameBtn').click(); else if(rg === 'coin') document.getElementById('coinHeadsBtn').click(); else if(rg === 'wheel') document.getElementById('spinWheelBtn').click(); else if(rg === 'rps') document.getElementById('rpsRock').click(); else if(rg === 'wheel2') document.getElementById('spinLuckyWheelBtn').click(); else if(rg === 'chest') { let chests = document.querySelectorAll('.chest'); if(chests[0]) chests[0].click(); } else if(rg === 'battleship') { let cells = document.querySelectorAll('.battleship-cell'); if(cells[0] && !cells[0].classList.contains('hit') && !cells[0].classList.contains('miss')) cells[0].click(); } }
+    function attachCard(){ animateBalance(globalBalance+300, true); addLog("Карта +300", true); playSound('win'); }
+    function withdraw(){ if(globalBalance <= 0){ showMessage("Нечего выводить",1); return; } let fee = globalBalance * 0.07, after = globalBalance - fee; showMessage(`Вывод: ${Math.floor(globalBalance)} → ${Math.floor(after)} (комиссия ${Math.floor(fee)})`); addLog(`Вывод ${Math.floor(globalBalance)}`, false); globalBalance = 0; updateBalanceUI(); saveGameData(); }
+    function setTheme(t){ document.body.classList.remove('light','dark'); document.body.classList.add(t); localStorage.setItem('casinoTheme', t); }
+    
+    // ===== СЛОТЫ =====
+    const sym = ["💎","🍌","🍒","🍊","🍋"]; const mult = {"💎":10,"🍌":5,"🍒":3,"🍊":2,"🍋":1}; let slotHistory = [];
+    function createReelStrip(reelId) { let strip = document.getElementById(reelId); strip.innerHTML = ''; for(let i = 0; i < 20; i++) { let div = document.createElement('div'); div.className = 'reel-symbol'; div.innerText = sym[Math.floor(Math.random() * sym.length)]; strip.appendChild(div); } }
+    function setReelToSymbol(reelId, symbol) { let strip = document.getElementById(reelId); strip.innerHTML = ''; for(let i = 0; i < 10; i++) { let div = document.createElement('div'); div.className = 'reel-symbol'; div.innerText = sym[Math.floor(Math.random() * sym.length)]; strip.appendChild(div); } let mainDiv = document.createElement('div'); mainDiv.className = 'reel-symbol'; mainDiv.innerText = symbol; strip.appendChild(mainDiv); for(let i = 0; i < 10; i++) { let div = document.createElement('div'); div.className = 'reel-symbol'; div.innerText = sym[Math.floor(Math.random() * sym.length)]; strip.appendChild(div); } let reel = strip.parentElement; let rect = reel.getBoundingClientRect(); let targetY = - (10 * 110) + (rect.height / 2) - 55; strip.style.transform = `translateY(${targetY}px)`; }
+    createReelStrip('strip1'); createReelStrip('strip2'); createReelStrip('strip3');
+    async function spinSlots(){ let bet = parseInt(document.getElementById('slotBet').value); if(bet > globalBalance){ showMessage("Не хватает",1); return; } globalBalance -= bet; updateBalanceUI(); let reels = [document.getElementById('slot1'), document.getElementById('slot2'), document.getElementById('slot3')]; let strips = [document.getElementById('strip1'), document.getElementById('strip2'), document.getElementById('strip3')]; strips.forEach(s => s.style.transform = 'translateY(0px)'); reels.forEach(r => r.classList.add('spinning')); await new Promise(r => setTimeout(r, 800)); let finals = [sym[Math.floor(Math.random()*5)], sym[Math.floor(Math.random()*5)], sym[Math.floor(Math.random()*5)]]; reels.forEach((r,i) => { r.classList.remove('spinning'); }); setReelToSymbol('strip1', finals[0]); setReelToSymbol('strip2', finals[1]); setReelToSymbol('strip3', finals[2]); let win = 0; if(finals[0] === finals[1] && finals[1] === finals[2]) win = bet * mult[finals[0]]; else if(finals[0] === finals[1] || finals[1] === finals[2] || finals[0] === finals[2]){ let s = finals[0] === finals[1] ? finals[0] : finals[1] === finals[2] ? finals[1] : finals[0]; win = Math.floor(bet * mult[s] * 0.7); } let bonusMult = 1 + vipBonus/100; win = Math.floor(win * bonusMult); if(win > 0){ await animateBalance(globalBalance + win, true); playSound('win'); addLog(`СЛОТЫ: выигрыш ${win}`, true); slotHistory.unshift(`+${win}`); burstConfetti(); totalBet += bet; updateVIP(); checkDailyTask('slots', true); updateAchievementCount('slots_master'); if(!achievements.find(a=>a.id==='first_win').unlocked) checkAchievement('first_win'); }else{ addLog(`СЛОТЫ: проигрыш ${bet}`, false); playSound('lose'); showGameNotify(`ПРОИГРЫШ ${bet} 💎`, false); slotHistory.unshift(`❌`); totalBet += bet; updateVIP(); } if(slotHistory.length > 5) slotHistory.pop(); document.getElementById('slotHistory').innerHTML = "📜 " + slotHistory.join(" "); saveGameData(); }
+    
+    // ===== РУЛЕТКА =====
+    const rouletteNumbers = [0,32,15,19,4,21,2,25,17,34,6,27,13,36,11,30,8,23,10,5,24,16,33,1,20,14,31,9,22,18,29,7,28,12,35,3,26];
+    const redNumbers = [1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36];
+    function drawRouletteWheel() { const canvas = document.getElementById('rouletteCanvas'); const ctx = canvas.getContext('2d'); const w = 320, h = 320; const cx = 160, cy = 160; const r = 140; const step = (2 * Math.PI) / 37; ctx.clearRect(0,0,w,h); for(let i=0;i<37;i++){ const start = i*step - Math.PI/2; const end = (i+1)*step - Math.PI/2; const num = rouletteNumbers[i]; const isRed = redNumbers.includes(num); const isGreen = num === 0; ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,start,end); ctx.fillStyle = isGreen ? '#27ae60' : (isRed ? '#c0392b' : '#2c3e50'); ctx.fill(); ctx.strokeStyle = '#d4af37'; ctx.stroke(); ctx.save(); ctx.translate(cx,cy); ctx.rotate(start + step/2); ctx.font = 'bold 12px Arial'; ctx.fillStyle = 'white'; ctx.shadowBlur = 1; ctx.fillText(num.toString(), r-20, 4); ctx.restore(); } ctx.beginPath(); ctx.arc(cx,cy,20,0,2*Math.PI); ctx.fillStyle = '#ffd700'; ctx.fill(); ctx.strokeStyle = '#b8860b'; ctx.lineWidth = 2; ctx.stroke(); }
+    drawRouletteWheel();
+    let rouletteGrid = document.getElementById('rouletteGrid'); let selectedRoulette = null; let rouletteBetType = 'number';
+    for(let i=0;i<=36;i++){ let cell = document.createElement('div'); cell.className = 'roulette-cell'; cell.innerText = i; let isRed = redNumbers.includes(i); cell.style.background = i===0 ? '#27ae60' : (isRed ? '#c0392b' : '#2c3e50'); cell.onclick = () => { document.querySelectorAll('.roulette-cell').forEach(c => c.classList.remove('selected')); cell.classList.add('selected'); selectedRoulette = i; rouletteBetType = 'number'; }; rouletteGrid.appendChild(cell); }
+    function spinRoulette(){ let bet = parseInt(document.getElementById('rouletteBet').value); if(bet > globalBalance){ showMessage("Не хватает",1); return; } globalBalance -= bet; updateBalanceUI(); let canvas = document.getElementById('rouletteCanvas'); canvas.classList.add('spinning'); setTimeout(async () => { canvas.classList.remove('spinning'); let result = Math.floor(Math.random() * 37); let win = 0; if(rouletteBetType === 'number' && selectedRoulette !== null && result === selectedRoulette){ win = bet * 35; } else if(rouletteBetType === 'red' && redNumbers.includes(result)){ win = bet * 2; } else if(rouletteBetType === 'black' && result !== 0 && !redNumbers.includes(result)){ win = bet * 2; } let bonusMult = 1 + vipBonus/100; win = Math.floor(win * bonusMult); if(win > 0){ await animateBalance(globalBalance + win, true); addLog(`РУЛЕТКА: выпало ${result} выигрыш ${win}`, true); playSound('win'); burstConfetti(); totalBet += bet; updateVIP(); checkDailyTask('roulette', true); if(!achievements.find(a=>a.id==='first_win').unlocked) checkAchievement('first_win'); }else{ addLog(`РУЛЕТКА: выпало ${result} проигрыш ${bet}`, false); playSound('lose'); showGameNotify(`ПРОИГРЫШ ${bet} 💎`, false); totalBet += bet; updateVIP(); } saveGameData(); }, 2000); }
+    document.getElementById('betRedBtn').onclick = () => { selectedRoulette = null; rouletteBetType = 'red'; document.querySelectorAll('.roulette-cell').forEach(c => c.classList.remove('selected')); showMessage("Ставка на КРАСНОЕ"); };
+    document.getElementById('betBlackBtn').onclick = () => { selectedRoulette = null; rouletteBetType = 'black'; document.querySelectorAll('.roulette-cell').forEach(c => c.classList.remove('selected')); showMessage("Ставка на ЧЁРНОЕ"); };
+    
+    // ===== КОСТИ =====
+    let selectedNumber = 7; let numsDiv = document.getElementById('numbersGrid'); numsDiv.innerHTML = '';
+    for(let i=2;i<=12;i++){ let b = document.createElement('button'); b.innerText = i; b.classList.add('num-btn'); if(i === 7) b.classList.add('selected'); b.onclick = (function(num) { return function() { document.querySelectorAll('.num-btn').forEach(btn => btn.classList.remove('selected')); b.classList.add('selected'); selectedNumber = num; }; })(i); numsDiv.appendChild(b); }
+    function rollDice(){ let bet = parseInt(document.getElementById('diceBet').value); if(bet > globalBalance){ showMessage("Не хватает",1); return; } globalBalance -= bet; updateBalanceUI(); let d1 = document.getElementById('die1'), d2 = document.getElementById('die2'); d1.classList.add('rolling'); d2.classList.add('rolling'); setTimeout(() => { d1.classList.remove('rolling'); d2.classList.remove('rolling'); }, 300); let f1 = Math.floor(Math.random()*6)+1, f2 = Math.floor(Math.random()*6)+1, sum = f1+f2; const map = {1:"⚀",2:"⚁",3:"⚂",4:"⚃",5:"⚄",6:"⚅"}; d1.innerText = map[f1]; d2.innerText = map[f2]; let win = 0; if(sum === selectedNumber){ win = bet * 5; let bonusMult = 1 + vipBonus/100; win = Math.floor(win * bonusMult); animateBalance(globalBalance + win, true); addLog(`КОСТИ: выигрыш ${win} (${f1}+${f2}=${sum})`, true); playSound('win'); burstConfetti(); totalBet += bet; updateVIP(); checkDailyTask('dice', true); updateAchievementCount('dice_luck'); if(!achievements.find(a=>a.id==='first_win').unlocked) checkAchievement('first_win'); }else{ addLog(`КОСТИ: проигрыш ${bet} (${f1}+${f2}=${sum} вместо ${selectedNumber})`, false); playSound('lose'); showGameNotify(`ПРОИГРЫШ ${bet} 💎`, false); totalBet += bet; updateVIP(); } saveGameData(); }
+    
+    // ===== КРЭШ =====
+    let crashActive = false, crashInterval = null, currentMulti = 1, crashBet = 0;
+    function startCrash(){ let bet = parseInt(document.getElementById('crashBet').value); if(bet > globalBalance){ showMessage("Не хватает",1); return; } crashBet = bet; globalBalance -= bet; updateBalanceUI(); crashActive = true; currentMulti = 1; document.getElementById('crashMultiplier').innerText = "1.00x"; document.getElementById('startCrashBtn').disabled = true; let crashPoint = Math.random() * 2.5 + 1.1; crashInterval = setInterval(() => { if(!crashActive) return; currentMulti += 0.03; document.getElementById('crashMultiplier').innerText = currentMulti.toFixed(2) + "x"; document.getElementById('crashFill').style.width = Math.min(100, (currentMulti-1)/3*100) + '%'; if(currentMulti >= crashPoint) stopCrash(false); }, 100); }
+    function stopCrash(manual){ if(!crashActive) return; clearInterval(crashInterval); crashActive = false; if(manual){ let win = Math.floor(crashBet * currentMulti); let bonusMult = 1 + vipBonus/100; win = Math.floor(win * bonusMult); animateBalance(globalBalance + win, true); addLog(`КРЭШ: кэшаут x${currentMulti.toFixed(2)} +${win}`, true); playSound('win'); burstConfetti(); totalBet += crashBet; updateVIP(); if(currentMulti >= 3) checkAchievement('crash_hero'); if(!achievements.find(a=>a.id==='first_win').unlocked) checkAchievement('first_win'); }else{ addLog(`КРЭШ: краш на x${currentMulti.toFixed(2)}`, false); playSound('crash'); showGameNotify(`ПРОИГРЫШ ${crashBet} 💎`, false); totalBet += crashBet; updateVIP(); } document.getElementById('startCrashBtn').disabled = false; document.getElementById('crashMultiplier').innerText = "1.00x"; document.getElementById('crashFill').style.width = '0%'; saveGameData(); }
+    function manualCashout(){ if(crashActive) stopCrash(true); else showMessage("Нет раунда",1); }
+    
+    // ===== УДАЧА =====
+    function spinLucky(){ let bet = parseInt(document.getElementById('luckyBet').value); if(bet > globalBalance){ showMessage("Не хватает",1); return; } globalBalance -= bet; updateBalanceUI(); let mults = [0.1,0.3,0.5,0.7,0.9,1,1.2,1.5,1.8,2,2.5,3,4,5]; let r = mults[Math.floor(Math.random()*mults.length)]; let win = Math.floor(bet * r); let bonusMult = 1 + vipBonus/100; win = Math.floor(win * bonusMult); animateBalance(globalBalance + win, win > bet); let el = document.getElementById('luckyMultiplier'); el.classList.add('lucky-spin'); setTimeout(() => el.classList.remove('lucky-spin'), 500); setTimeout(() => { el.innerText = `x${r}`; if(win > bet){ addLog(`УДАЧА: x${r} +${win-bet}`, true); playSound('win'); totalBet += bet; updateVIP(); if(!achievements.find(a=>a.id==='first_win').unlocked) checkAchievement('first_win'); }else{ addLog(`УДАЧА: x${r}`, false); playSound('lose'); showGameNotify(`ПРОИГРЫШ ${bet-win} 💎`, false); totalBet += bet; updateVIP(); } }, 250); saveGameData(); }
+    
+    // ===== БЛЭКДЖЕК =====
+    let deck = [], playerCards = [], botCards = [], bjActive = false, bjBet = 0;
+    function createDeck(){ let suits = ['♠','♣','♥','♦'], vals = ['2','3','4','5','6','7','8','9','10','J','Q','K','A'], d = []; for(let s of suits) for(let v of vals) d.push({val:v, suit:s}); for(let i=d.length-1;i>0;i--){ let j = Math.floor(Math.random()*(i+1)); [d[i],d[j]] = [d[j],d[i]]; } return d; }
+    function cardValue(c){ if(c.val === 'A') return 11; if(['K','Q','J'].includes(c.val)) return 10; return parseInt(c.val); }
+    function handValue(h){ let s = h.reduce((a,c)=>a+cardValue(c),0), aces = h.filter(c=>c.val==='A').length; while(s>21 && aces>0){ s-=10; aces--; } return s; }
+    function renderBJ(){ document.getElementById('playerBJHand').innerHTML = playerCards.map(c => `<div class="bj-card">${c.val}${c.suit}</div>`).join(''); document.getElementById('botBJHand').innerHTML = botCards.map((c,i) => i===0 ? '<div class="bj-card">??</div>' : `<div class="bj-card">${c.val}${c.suit}</div>`).join(''); }
+    function endBJ(winner, msg){ bjActive = false; if(winner === 'player'){ let win = bjBet * 2; let bonusMult = 1 + vipBonus/100; win = Math.floor(win * bonusMult); animateBalance(globalBalance + win, true); addLog(`БЛЭКДЖЕК: выигрыш ${win}`, true); playSound('win'); burstConfetti(); totalBet += bjBet; updateVIP(); if(!achievements.find(a=>a.id==='first_win').unlocked) checkAchievement('first_win'); }else if(winner === 'push'){ animateBalance(globalBalance + bjBet, false); addLog(`БЛЭКДЖЕК: ничья`, false); }else{ addLog(`БЛЭКДЖЕК: проигрыш ${bjBet}`, false); playSound('lose'); showGameNotify(`ПРОИГРЫШ ${bjBet} 💎`, false); totalBet += bjBet; updateVIP(); } bjBet = 0; saveGameData(); }
+    function botTurn(){ while(handValue(botCards) < 17){ botCards.push(deck.pop()); renderBJ(); } let pv = handValue(playerCards), bv = handValue(botCards); if(bv > 21) endBJ('player', `У дилера перебор!`); else if(pv > bv) endBJ('player', `Вы выиграли`); else if(pv < bv) endBJ('bot', `Дилер выиграл`); else endBJ('push', `Ничья`); }
+    function startBJ(){ let bet = parseInt(document.getElementById('bjBet').value); if(bet > globalBalance){ showMessage("Не хватает",1); return; } globalBalance -= bet; updateBalanceUI(); bjBet = bet; bjActive = true; deck = createDeck(); playerCards = [deck.pop(), deck.pop()]; botCards = [deck.pop(), deck.pop()]; renderBJ(); if(handValue(playerCards) === 21) botTurn(); else document.getElementById('bjResult').innerHTML = `Ваша сумма: ${handValue(playerCards)}`; }
+    function hit(){ if(!bjActive){ showMessage("Начните игру",1); return; } playerCards.push(deck.pop()); renderBJ(); let pv = handValue(playerCards); if(pv > 21) endBJ('bot', `Перебор!`); else if(pv === 21) botTurn(); else document.getElementById('bjResult').innerHTML = `Сумма: ${pv}`; }
+    function stand(){ if(!bjActive){ showMessage("Начните игру",1); return; } botTurn(); }
+    
+    // ===== ОРЁЛ/РЕШКА =====
+    function flipCoin(choice){ let bet = parseInt(document.getElementById('coinBet').value); if(bet > globalBalance){ showMessage("Не хватает",1); return; } globalBalance -= bet; updateBalanceUI(); let coin = document.getElementById('coinDisplay'); coin.classList.add('coin-flip'); setTimeout(() => { coin.classList.remove('coin-flip'); let result = Math.random() < 0.5 ? 'орел' : 'решка'; let win = (choice === result); coin.innerText = result === 'орел' ? '🦅' : '🪙'; if(win){ let w = Math.floor(bet * 1.5); let bonusMult = 1 + vipBonus/100; w = Math.floor(w * bonusMult); animateBalance(globalBalance + w, true); addLog(`ОРЁЛ/РЕШКА: ${result} +${w}`, true); playSound('win'); burstConfetti(); totalBet += bet; updateVIP(); if(!achievements.find(a=>a.id==='first_win').unlocked) checkAchievement('first_win'); }else{ addLog(`ОРЁЛ/РЕШКА: ${result} проигрыш ${bet}`, false); playSound('lose'); showGameNotify(`ПРОИГРЫШ ${bet} 💎`, false); totalBet += bet; updateVIP(); } saveGameData(); }, 500); }
+    
+    // ===== КОЛЕСО ФОРТУНЫ =====
+    let wheelBets = [], spinning = false, currentRotation = 0, targetRotation = 0, animFrame = null, spinStart = 0; const canvasW = document.getElementById('wheelCanvas'); let ctxW = canvasW.getContext('2d'); const SPIN_DURATION = 1800;
+    function totalPoolW() { return wheelBets.reduce((s,b) => s + b.bet, 0); }
+    function drawWheel(rot = 0) { if(!ctxW) return; let total = totalPoolW(); if(total === 0 || wheelBets.length === 0) { ctxW.clearRect(0,0,500,500); ctxW.beginPath(); ctxW.arc(250,250,240,0,2*Math.PI); ctxW.fillStyle = "#151e2e"; ctxW.fill(); ctxW.fillStyle = "#c9d1ff"; ctxW.font = "bold 22px system-ui"; ctxW.fillText("НЕТ СТАВОК", 172, 270); ctxW.beginPath(); ctxW.moveTo(492,250); ctxW.lineTo(472,232); ctxW.lineTo(472,268); ctxW.fillStyle = "#ffc164"; ctxW.fill(); return; } let colors = ["#C4451B","#DC933C","#5F9E6E","#B57C48","#7C6E3A","#4F7A8C"]; let start = rot, cum = 0, seg = []; for(let i=0;i<wheelBets.length;i++) { let ang = (wheelBets[i].bet / total) * 2 * Math.PI; seg.push({ start: start+cum, end: start+cum+ang, color: colors[i%colors.length], name: wheelBets[i].name, perc: (wheelBets[i].bet/total)*100 }); cum += ang; } ctxW.clearRect(0,0,500,500); for(let s of seg) { ctxW.beginPath(); ctxW.moveTo(250,250); ctxW.arc(250,250,240, s.start, s.end); ctxW.fillStyle = s.color; ctxW.fill(); ctxW.strokeStyle = "#efcd87"; ctxW.stroke(); } for(let s of seg) { let mid = s.start + (s.end - s.start)/2; let x = 250 + Math.cos(mid) * 170, y = 250 + Math.sin(mid) * 170; ctxW.fillStyle = "#FFFCE8"; ctxW.font = "500 12px system-ui"; ctxW.fillText(`${s.perc.toFixed(1)}%`, x-16, y+4); ctxW.fillStyle = "#FFF0BA"; ctxW.font = "10px monospace"; ctxW.fillText(s.name.slice(0,6), x-18, y-8); } ctxW.beginPath(); ctxW.arc(250,250,52,0,2*Math.PI); ctxW.fillStyle = "#010114"; ctxW.fill(); ctxW.fillStyle = "#f7c55e"; ctxW.font = "bold 24px monospace"; ctxW.fillText("W", 235, 269); ctxW.beginPath(); ctxW.moveTo(492,250); ctxW.lineTo(472,232); ctxW.lineTo(472,268); ctxW.fillStyle = "#ffc164"; ctxW.fill(); }
+    function updateWheelUI() { let total = totalPoolW(); if(wheelBets.length === 0) { document.getElementById('playersList').innerHTML = '<div class="player-item">✨ Добавьте игроков</div>'; drawWheel(currentRotation); document.getElementById('wheelStats').innerHTML = `⚡ Общий банк: 0 | ДЖЕКПОТ: ${Math.floor(jackpot)}`; return; } let html = ''; for(let i=0;i<wheelBets.length;i++) { let perc = total ? ((wheelBets[i].bet/total)*100).toFixed(1) : 0; html += `<div class="player-item"><span>👤 ${wheelBets[i].name}</span><span>${wheelBets[i].bet} 💎 (${perc}%)</span><button class="delete-player" data-index="${i}" style="background:#8b2c2c; padding:2px 10px; border-radius:30px;">✖️</button></div>`; } document.getElementById('playersList').innerHTML = html; drawWheel(currentRotation); document.getElementById('wheelStats').innerHTML = `🎯 Общий банк: ${total} 💎 | ДЖЕКПОТ: ${Math.floor(jackpot)} · Участников: ${wheelBets.length}`; document.querySelectorAll('.delete-player').forEach(btn => { btn.onclick = () => { let idx = parseInt(btn.dataset.index); if(!isNaN(idx)) { wheelBets.splice(idx,1); updateWheelUI(); } }; }); }
+    function addPlayerBet() { let name = document.getElementById('playerNameInput').value.trim(); if(!name) { showMessage("Введите имя",1); return; } let amount = parseInt(document.getElementById('playerBetAmount').value); if(amount > globalBalance) { showMessage("Не хватает",1); return; } globalBalance -= amount; wheelBets.push({ name: name, bet: amount }); updateBalanceUI(); updateWheelUI(); showMessage(`${name} поставил ${amount} 💎`); document.getElementById('playerNameInput').value = ''; saveGameData(); }
+    function pickWinnerW() { let total = totalPoolW(); let r = Math.random(), acc = 0; for(let b of wheelBets) { let ch = b.bet / total; if(r < acc + ch) return b; acc += ch; } return wheelBets[0]; }
+    function targetAngleW(winner) { let total = totalPoolW(), cum = 0, ws = 0; for(let i=0;i<wheelBets.length;i++) { let sz = (wheelBets[i].bet / total) * 2 * Math.PI; if(wheelBets[i].name === winner.name && wheelBets[i].bet === winner.bet) { ws = cum; break; } cum += sz; } let arrow = (Math.PI * 3/2) % (2*Math.PI); let need = (arrow - ws + 2*Math.PI) % (2*Math.PI); return need + 5 * 2 * Math.PI; }
+    function animateWheel(now) { if(!spinning) return; let elapsed = now - spinStart; let t = Math.min(1, elapsed / SPIN_DURATION); let ease = 1 - Math.pow(1-t, 3); let angle = currentRotation + (targetRotation - currentRotation) * ease; drawWheel(angle); if(t >= 1) { spinning = false; cancelAnimationFrame(animFrame); drawWheel(targetRotation); let total = totalPoolW(), finalWinner = null; if(total > 0 && wheelBets.length) { let arrowDir = (Math.PI*3/2) % (2*Math.PI); let eff = (arrowDir - targetRotation + 2*Math.PI) % (2*Math.PI); let acc = 0; for(let b of wheelBets) { let sz = (b.bet/total) * 2 * Math.PI; if(eff >= acc && eff < acc + sz) { finalWinner = b; break; } acc += sz; } if(!finalWinner) finalWinner = wheelBets[0]; } if(finalWinner) { let prize = totalPoolW(); let winBonus = Math.random() < 0.05 ? jackpot : 0; if(winBonus) jackpot = 0; let totalWin = prize + winBonus; let bonusMult = 1 + vipBonus/100; totalWin = Math.floor(totalWin * bonusMult); animateBalance(globalBalance + totalWin, true); addLog(`КОЛЕСО: победитель ${finalWinner.name} +${totalWin}`, true); playSound('win'); burstConfetti(); totalBet += totalPoolW(); updateVIP(); if(!achievements.find(a=>a.id==='first_win').unlocked) checkAchievement('first_win'); } wheelBets = []; currentRotation = 0; updateWheelUI(); document.getElementById('spinWheelBtn').disabled = false; document.getElementById('addPlayerBtn').disabled = false; saveGameData(); } else { animFrame = requestAnimationFrame(animateWheel); } }
+    function startWheel() { if(spinning) { showMessage("Колесо крутится",1); return; } if(wheelBets.length === 0) { showMessage("Добавьте игроков",1); return; } let winner = pickWinnerW(); if(!winner) return; targetRotation = targetAngleW(winner); currentRotation = currentRotation % (2*Math.PI); spinning = true; document.getElementById('spinWheelBtn').disabled = true; document.getElementById('addPlayerBtn').disabled = true; spinStart = performance.now(); animFrame = requestAnimationFrame(animateWheel); }
+    
+    // ===== RPS =====
+    function playRPS(playerChoice, choiceName) {
+        let bet = parseInt(document.getElementById('rpsBet').value);
+        if(bet > globalBalance){ showMessage("Не хватает",1); return; }
+        globalBalance -= bet; updateBalanceUI();
+        let choices = ['✊', '✋', '✌️'];
+        let botChoice = choices[Math.floor(Math.random() * 3)];
+        let result = '';
+        let win = false;
+        if (playerChoice === botChoice) result = 'Ничья!';
+        else if ((playerChoice === '✊' && botChoice === '✌️') ||
+                 (playerChoice === '✋' && botChoice === '✊') ||
+                 (playerChoice === '✌️' && botChoice === '✋')) {
+            result = 'Вы выиграли!';
+            win = true;
+        } else {
+            result = 'Вы проиграли!';
+        }
+        if(win){
+            let winAmount = bet * 2;
+            let bonusMult = 1 + vipBonus/100;
+            winAmount = Math.floor(winAmount * bonusMult);
+            animateBalance(globalBalance + winAmount, true);
+            addLog(`RPS: ${choiceName} vs ${botChoice === '✊' ? 'Камень' : botChoice === '✋' ? 'Бумага' : 'Ножницы'} — ${result} +${winAmount}`, true);
+            playSound('win'); burstConfetti(); totalBet += bet; updateVIP(); checkDailyTask('rps', true); if(!achievements.find(a=>a.id==='first_win').unlocked) checkAchievement('first_win');
+        } else if(result === 'Ничья!'){
+            animateBalance(globalBalance + bet, false);
+            addLog(`RPS: ${choiceName} vs ${botChoice === '✊' ? 'Камень' : botChoice === '✋' ? 'Бумага' : 'Ножницы'} — Ничья, ставка возвращена`, false);
+        } else {
+            addLog(`RPS: ${choiceName} vs ${botChoice === '✊' ? 'Камень' : botChoice === '✋' ? 'Бумага' : 'Ножницы'} — ${result} проигрыш ${bet}`, false);
+            playSound('lose'); showGameNotify(`ПРОИГРЫШ ${bet} 💎`, false); totalBet += bet; updateVIP();
+        }
+        saveGameData();
+        document.getElementById('rpsResult').innerHTML = `${playerChoice} vs ${botChoice} — ${result}`;
+        setTimeout(() => { document.getElementById('rpsResult').innerHTML = '👉 Выберите жест, выигрыш x2'; }, 2500);
+    }
+    
+    // ===== КОЛЕСО УДАЧИ =====
+    let luckyWheelSegments = [
+        { value: 0.5, color: '#3498db', text: 'x0.5' }, { value: 0.8, color: '#2ecc71', text: 'x0.8' },
+        { value: 1, color: '#f1c40f', text: 'x1' }, { value: 1.5, color: '#e67e22', text: 'x1.5' },
+        { value: 2, color: '#e74c3c', text: 'x2' }, { value: 2.5, color: '#9b59b6', text: 'x2.5' },
+        { value: 3, color: '#1abc9c', text: 'x3' }, { value: 5, color: '#d35400', text: 'x5' },
+        { value: 7, color: '#c0392b', text: 'x7' }, { value: 10, color: '#f39c12', text: 'x10' }
+    ];
+    let luckyWheelRotation = 0, spinningLucky = false, luckyAnimFrame = null, luckySpinStart = 0, luckyTargetRotation = 0;
+    const LUCKY_SPIN_DURATION = 2000;
+    function drawLuckyWheel() {
+        const canvas = document.getElementById('luckyWheelCanvas');
+        const ctx = canvas.getContext('2d');
+        const w = 350, h = 350, cx = 175, cy = 175, radius = 160, angleStep = (2 * Math.PI) / luckyWheelSegments.length;
+        ctx.clearRect(0, 0, w, h);
+        for (let i = 0; i < luckyWheelSegments.length; i++) {
+            const start = i * angleStep + luckyWheelRotation;
+            const end = (i + 1) * angleStep + luckyWheelRotation;
+            const seg = luckyWheelSegments[i];
+            ctx.beginPath(); ctx.moveTo(cx, cy); ctx.arc(cx, cy, radius, start, end);
+            ctx.fillStyle = seg.color; ctx.fill(); ctx.strokeStyle = '#d4af37'; ctx.lineWidth = 2; ctx.stroke();
+            ctx.save(); ctx.translate(cx, cy); ctx.rotate(start + angleStep / 2);
+            ctx.font = 'bold 16px Arial'; ctx.fillStyle = 'white'; ctx.shadowBlur = 2;
+            ctx.fillText(seg.text, radius - 40, 8); ctx.restore();
+        }
+        ctx.beginPath(); ctx.arc(cx, cy, 25, 0, 2 * Math.PI); ctx.fillStyle = '#ffd700'; ctx.fill(); ctx.strokeStyle = '#b8860b'; ctx.lineWidth = 3; ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(cx - 10, cy - radius - 5); ctx.lineTo(cx, cy - radius - 20); ctx.lineTo(cx + 10, cy - radius - 5); ctx.fillStyle = '#ff4444'; ctx.fill();
+    }
+    function spinLuckyWheel() {
+        if (spinningLucky) { showMessage("Колесо уже крутится",1); return; }
+        let bet = parseInt(document.getElementById('luckyWheelBet').value);
+        if (bet > globalBalance) { showMessage("Не хватает",1); return; }
+        globalBalance -= bet; updateBalanceUI(); spinningLucky = true;
+        const randomSegment = Math.floor(Math.random() * luckyWheelSegments.length);
+        const targetValue = luckyWheelSegments[randomSegment].value;
+        const anglePerSegment = (2 * Math.PI) / luckyWheelSegments.length;
+        const targetSegmentAngle = randomSegment * anglePerSegment;
+        const pointerAngle = -Math.PI / 2;
+        let neededRotation = pointerAngle - targetSegmentAngle;
+        neededRotation = (neededRotation + 2 * Math.PI) % (2 * Math.PI);
+        luckyTargetRotation = luckyWheelRotation + neededRotation + 8 * Math.PI;
+        luckySpinStart = performance.now();
+        luckyAnimFrame = requestAnimationFrame(animateLuckyWheel);
+        setTimeout(async () => {
+            let win = Math.floor(bet * targetValue);
+            let bonusMult = 1 + vipBonus/100;
+            win = Math.floor(win * bonusMult);
+            await animateBalance(globalBalance + win, true);
+            addLog(`КОЛЕСО УДАЧИ: выпало x${targetValue} +${win}`, true);
+            playSound('win'); burstConfetti(); totalBet += bet; updateVIP(); if(!achievements.find(a=>a.id==='first_win').unlocked) checkAchievement('first_win');
+            document.getElementById('luckyWheelResult').innerHTML = `🎉 Выпало x${targetValue}! Выигрыш ${win} 💎`;
+            setTimeout(() => { document.getElementById('luckyWheelResult').innerHTML = 'Выпадет множитель от x0.5 до x10'; }, 3000);
+        }, LUCKY_SPIN_DURATION);
+    }
+    function animateLuckyWheel(now) {
+        if (!spinningLucky) return;
+        let elapsed = now - luckySpinStart;
+        let t = Math.min(1, elapsed / LUCKY_SPIN_DURATION);
+        let ease = 1 - Math.pow(1 - t, 3);
+        luckyWheelRotation = (luckyTargetRotation * ease) % (2 * Math.PI);
+        drawLuckyWheel();
+        if (t >= 1) { spinningLucky = false; cancelAnimationFrame(luckyAnimFrame); luckyWheelRotation = luckyTargetRotation % (2 * Math.PI); drawLuckyWheel(); }
+        else { luckyAnimFrame = requestAnimationFrame(animateLuckyWheel); }
+    }
+    drawLuckyWheel();
+    
+    // ===== СУНДУКИ =====
+    let chestMultipliers = [0.5, 1.2, 2, 2.5, 3];
+    let chestOpened = false;
+    function initChests() { document.querySelectorAll('.chest').forEach(chest => { chest.classList.remove('opened'); chest.innerHTML = '📦'; chest.style.opacity = '1'; }); chestOpened = false; }
+    function openChest(index) {
+        if (chestOpened) { showMessage("Вы уже открыли сундук в этом раунде!",1); return; }
+        let bet = parseInt(document.getElementById('chestBet').value);
+        if (bet > globalBalance) { showMessage("Не хватает",1); return; }
+        globalBalance -= bet; updateBalanceUI();
+        let multiplier = chestMultipliers[Math.floor(Math.random() * chestMultipliers.length)];
+        let win = Math.floor(bet * multiplier);
+        let bonusMult = 1 + vipBonus/100;
+        win = Math.floor(win * bonusMult);
+        animateBalance(globalBalance + win, true);
+        addLog(`СУНДУК: множитель x${multiplier} +${win}`, true);
+        playSound('chest'); burstConfetti(); totalBet += bet; updateVIP(); if(!achievements.find(a=>a.id==='first_win').unlocked) checkAchievement('first_win');
+        document.querySelectorAll('.chest')[index].innerHTML = win > bet ? '💎' : '🍂';
+        document.querySelectorAll('.chest')[index].style.opacity = '0.7';
+        document.getElementById('chestResult').innerHTML = `Сундук ${index+1}: x${multiplier}! Выигрыш ${win} 💎`;
+        chestOpened = true;
+        setTimeout(() => { document.getElementById('chestResult').innerHTML = 'Выберите сундук и получите множитель x0.5 - x3'; }, 3000);
+        saveGameData();
+    }
+    document.querySelectorAll('.chest').forEach((chest, idx) => { chest.onclick = () => openChest(idx); });
+    document.getElementById('resetChestsBtn').onclick = initChests;
+    
+    // ===== МОРСКОЙ БОЙ =====
+    let battleshipBoard = [], battleshipHits = 0, battleshipActive = true;
+    function initBattleship() {
+        battleshipBoard = Array(5).fill().map(() => Array(5).fill(false));
+        battleshipHits = 0;
+        let shipsPlaced = 0;
+        while(shipsPlaced < 3) {
+            let row = Math.floor(Math.random() * 5);
+            let col = Math.floor(Math.random() * 5);
+            if(!battleshipBoard[row][col]) { battleshipBoard[row][col] = true; shipsPlaced++; }
+        }
+        battleshipActive = true;
+        for(let i=0;i<5;i++) for(let j=0;j<5;j++) localStorage.removeItem(`battleship_${i}_${j}`);
+        renderBattleshipBoard();
+        document.getElementById('battleshipResult').innerHTML = 'Найдите 3 корабля! Выигрыш x5 за каждый';
+    }
+    function renderBattleshipBoard() {
+        const board = document.getElementById('battleshipBoard');
+        board.innerHTML = '';
+        for(let i=0;i<5;i++) for(let j=0;j<5;j++) {
+            const cell = document.createElement('div'); cell.className = 'battleship-cell';
+            cell.dataset.row = i; cell.dataset.col = j;
+            if(localStorage.getItem(`battleship_${i}_${j}`) === 'hit') { cell.classList.add('hit'); cell.innerHTML = '💥'; }
+            else if(localStorage.getItem(`battleship_${i}_${j}`) === 'miss') { cell.classList.add('miss'); cell.innerHTML = '❌'; }
+            cell.onclick = () => battleshipShoot(i, j);
+            board.appendChild(cell);
+        }
+    }
+    function battleshipShoot(row, col) {
+        if(!battleshipActive) { showMessage("Игра окончена! Нажмите НОВАЯ ИГРА",1); return; }
+        if(localStorage.getItem(`battleship_${row}_${col}`)) { showMessage("Вы уже стреляли сюда!",1); return; }
+        let bet = parseInt(document.getElementById('battleshipBet').value);
+        if(bet > globalBalance) { showMessage("Не хватает",1); return; }
+        globalBalance -= bet; updateBalanceUI();
+        if(battleshipBoard[row][col]) {
+            let win = bet * 5;
+            let bonusMult = 1 + vipBonus/100;
+            win = Math.floor(win * bonusMult);
+            animateBalance(globalBalance + win, true);
+            addLog(`МОРСКОЙ БОЙ: попадание! +${win}`, true);
+            playSound('hit'); burstConfetti(); totalBet += bet; updateVIP(); if(!achievements.find(a=>a.id==='first_win').unlocked) checkAchievement('first_win');
+            localStorage.setItem(`battleship_${row}_${col}`, 'hit');
+            battleshipHits++;
+            if(battleshipHits >= 3) { battleshipActive = false; document.getElementById('battleshipResult').innerHTML = `🎉 ПОБЕДА! Все 3 корабля найдены!`; }
+            else { document.getElementById('battleshipResult').innerHTML = `🎯 ПОПАДАНИЕ! Осталось кораблей: ${3-battleshipHits}`; }
+        } else {
+            addLog(`МОРСКОЙ БОЙ: промах`, false);
+            playSound('miss');
+            localStorage.setItem(`battleship_${row}_${col}`, 'miss');
+            document.getElementById('battleshipResult').innerHTML = `❌ ПРОМАХ!`;
+            totalBet += bet; updateVIP();
+        }
+        renderBattleshipBoard();
+        saveGameData();
+        if(!battleshipActive) setTimeout(() => { document.getElementById('battleshipResult').innerHTML = 'Игра окончена! Нажмите НОВАЯ ИГРА'; }, 2000);
+    }
+    function resetBattleship() { for(let i=0;i<5;i++) for(let j=0;j<5;j++) localStorage.removeItem(`battleship_${i}_${j}`); initBattleship(); showMessage("Морской бой перезапущен"); }
+    initBattleship();
+    
+    // ===== MAX КНОПКИ =====
+    document.getElementById('slotMaxBtn').onclick = () => { document.getElementById('slotBet').value = Math.min(globalBalance, 1000); };
+    document.getElementById('rouletteMaxBtn').onclick = () => { document.getElementById('rouletteBet').value = Math.min(globalBalance, 1000); };
+    document.getElementById('diceMaxBtn').onclick = () => { document.getElementById('diceBet').value = Math.min(globalBalance, 1000); };
+    
+    // ПРИВЯЗКА КНОПОК
+    document.getElementById('spinSlotsBtn').onclick = spinSlots;
+    document.getElementById('spinRouletteBtn').onclick = spinRoulette;
+    document.getElementById('rollDiceBtn').onclick = rollDice;
+    document.getElementById('startCrashBtn').onclick = startCrash;
+    document.getElementById('cashoutBtn').onclick = manualCashout;
+    document.getElementById('spinLuckyBtn').onclick = spinLucky;
+    document.getElementById('newBJGameBtn').onclick = startBJ;
+    document.getElementById('hitBtn').onclick = hit;
+    document.getElementById('standBtn').onclick = stand;
+    document.getElementById('coinHeadsBtn').onclick = () => flipCoin('орел');
+    document.getElementById('coinTailsBtn').onclick = () => flipCoin('решка');
+    document.getElementById('addPlayerBtn').onclick = addPlayerBet;
+    document.getElementById('spinWheelBtn').onclick = startWheel;
+    document.getElementById('cardBtn').onclick = attachCard;
+    document.getElementById('withdrawBtn').onclick = withdraw;
+    document.getElementById('dailyBonusBtn').onclick = dailyBonus;
+    document.getElementById('quickGameBtn').onclick = quickGame;
+    document.getElementById('rpsRock').onclick = () => playRPS('✊', 'Камень');
+    document.getElementById('rpsPaper').onclick = () => playRPS('✋', 'Бумага');
+    document.getElementById('rpsScissors').onclick = () => playRPS('✌️', 'Ножницы');
+    document.getElementById('spinLuckyWheelBtn').onclick = spinLuckyWheel;
+    document.getElementById('resetBattleshipBtn').onclick = resetBattleship;
+    document.getElementById('toggleParticlesBtn').onclick = toggleParticles;
+    document.getElementById('copyReferralBtn').onclick = copyReferral;
+    document.getElementById('buyVipBtn').onclick = buyVIP;
+    document.getElementById('depositBtn').onclick = deposit;
+    
+    // ВКЛАДКИ
+    document.querySelectorAll('.game-tab').forEach(t => { t.onclick = () => { document.querySelectorAll('.game-tab').forEach(tt => tt.classList.remove('active')); t.classList.add('active'); document.querySelectorAll('.game-panel').forEach(p => p.classList.remove('active-panel')); document.getElementById(t.dataset.game + 'Game').classList.add('active-panel'); }; });
+    
+    // НАСТРОЙКИ
+    let modal = document.getElementById('settingsModal');
+    document.getElementById('settingsBtn').onclick = () => modal.style.display = 'flex';
+    document.getElementById('closeSettings').onclick = () => modal.style.display = 'none';
+    document.getElementById('lightThemeBtn').onclick = () => { setTheme('light'); modal.style.display = 'none'; showMessage("Светлая тема"); };
+    document.getElementById('darkThemeBtn').onclick = () => { setTheme('dark'); modal.style.display = 'none'; showMessage("Тёмная тема"); };
+    
+    setTheme(localStorage.getItem('casinoTheme') || 'dark');
+    loadGameData();
+    addLog("Добро пожаловать в ROYAL CASINO!", true);
+    updateWheelUI();
+    drawWheel(0);
+    
+    const styleSheet = document.createElement("style");
+    styleSheet.textContent = `@keyframes confettiFall { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(360deg); opacity: 0; } }`;
+    document.head.appendChild(styleSheet);
+</script>
+</body>
+</html>
